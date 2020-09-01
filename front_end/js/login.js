@@ -4,7 +4,7 @@ let clave = document.getElementById('clave')
 
 clave.addEventListener('invalid', (event) => {
     console.log(event.target)
-    event.target.setCustomValidity('La clave debe contener mayuscula, minuscula, caracter especial');
+    event.target.setCustomValidity('La contraseña debe tener al menos 8 caracteres, al menos un dígito, al menos una minúscula y al menos una mayúscula');
 }) 
 
 ingresar.addEventListener('click', () => {
