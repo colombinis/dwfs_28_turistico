@@ -23,6 +23,7 @@ server.delete('/paquete', function (req, res) {
 });
 
 server.get('/paquete/:id', function (req, res) {
+    archivos.appendFile('./test.txt', `${req.params.id}`);
     res.send('Get paquete id');
 });
 
