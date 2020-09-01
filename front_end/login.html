@@ -8,19 +8,22 @@
 </head>
 <body>
 
-   <h1>Acamica Viajes Login</h1>
+   <h1>Acamica Viajes</h1>
+   <h3>Iniciar Sesión</h3>
     <form>
         <div class="container"> 
             <label>Email:</label> 
-            <input type="email" placeholder="Ingresar Usuario" name="username" required>
+            <br>
+            <input type="email" id="usuario" placeholder="Ingresar Usuario" name="username" required>
             <label>Contraseña:</label> 
-            <input type="password" placeholder="Enter Password" name="password" required>
-            <button type="submit">Ingresar</button> 
-            <input type="checkbox" checked="checked"> Recordar Datos
-            Forgot <a href="#"> password</a> 
+            <input type="password" pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$"
+            id="clave" minlength="8" placeholder="Enter Password" name="password" required>
+            <button type="submit" id="ingresar">Ingresar</button>
+            <input type="checkbox" checked="checked" class="recordar"> Recordar mis datos
+            <p>Olvidaste tu <a href="#">password</a>?</p>  
         </div> 
     </form>   
-</body>   
-    
+ 
+    <script src="./js/login.js"></script>
 </body>
 </html>
