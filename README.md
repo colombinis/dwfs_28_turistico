@@ -1,5 +1,4 @@
-# dwfs_28_turistico
-## trabajo integrador paquetes turisticos
+# Trabajo integrador paquetes turisticos
 
 ### Paquete turistico (atributos)
 * titulo
