@@ -1,0 +1,29 @@
+body {
+    background-color: purple;
+    font-family: sans-serif;
+    color: white;
+}
+
+button {
+    background-color: lightblue;
+    border: none;
+    cursor: pointer;
+    padding: 15px;
+    margin: 10px 0px;
+}
+
+form {
+    border: 3px solid #f1f1f1;
+}
+
+input {
+    width: 100%;
+    margin: 8px 0;
+    padding: 12px 20px;
+    display: inline-block;
+    border: 2px solid pink;
+}
+
+button:hover{
+    opacity: 0.7
+}
