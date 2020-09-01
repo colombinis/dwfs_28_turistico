@@ -1,11 +1,23 @@
 body {
-    background-color: purple;
+    background-color:#F8F8F8;
     font-family: sans-serif;
-    color: white;
+    color: #5327F7;
+}
+
+h1 {
+    text-align: center;
+}
+
+h3 {
+    text-align: center;
+}
+.container {
+    padding: 2em;
 }
 
 button {
-    background-color: lightblue;
+    background-color: #5327F7;
+    color: white;
     border: none;
     cursor: pointer;
     padding: 15px;
@@ -17,13 +29,17 @@ form {
 }
 
 input {
-    width: 100%;
+    width:80%;
     margin: 8px 0;
     padding: 12px 20px;
     display: inline-block;
-    border: 2px solid pink;
+    border: 2px solid #5327F7;
 }
 
 button:hover{
     opacity: 0.7
+}
+
+.recordar {
+    display: flex;
 }
