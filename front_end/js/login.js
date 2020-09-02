@@ -1,36 +1,41 @@
 let ingresar = document.getElementById('ingresar');
-let clave = document.getElementById('clave')
+let clave = document.getElementById('clave');
+let usuario = document.getElementById('usuario')
+//variable para chequear si hay errores o no
+let hayErrores = false;
 
-clave.addEventListener('invalid', (event) => {
-    event.target.setCustomValidity('La contraseña debe tener al menos 8 caracteres y al menos una minúscula, una mayúscula y un número');
+usuario.addEventListener('invalid', (event) => {
+    hayErrores = true;
 }) 
 
+clave.addEventListener('invalid', (event) => {
+    event.target.setCustomValidity('La contraseña debe tener al menos 8 caracteres y al menos un número');
+    hayErrores = true;
+}) 
 
-ingresar.addEventListener('click', () => {
-    let usuario = document.getElementById('usuario').value
-     clave = document.getElementById('clave').value
+ingresar.addEventListener('click', (event) => {
+    // event.preventDefault();
+    let mail = usuario.value
+    let password = clave.value;
 
-    if(checkDatosFront(usuario,clave)){
-        if(checkDatosBack(usuario, clave)){
-            // window.location = './'
-        }
+    if(!hayErrores){
+        if(checkDatosBack(mail, password)){
+                location.href = './index.html'
+               }
         else {
-            alert('El usuario o la contraseña contienen errores')
-          
+                alert('El mail o la contraseña no coinciden con un usuario registrado')
         }
     }
     else {
-        alert('La contraseña debe contener mayuscula, minuscula, caracter especial')
+        alert('El mail o la contraseña no tienen el formato correcto')
     }
 })
 
-function checkDatosFront (usuario, clave){
-        return true
-}
 
-function checkDatosBack (usuario, clave) {
-    if (usuario == 'error@acamica.com') {
+
+function checkDatosBack (mail, password) {
+    if (mail == 'error@acamica.com') {
         return false;
     }
     return true;
-}
+} 
