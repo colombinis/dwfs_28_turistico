@@ -1,9 +1,24 @@
 const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
 const server = express();
-const archivos = require("./gestionArchivos");
+//const archivos = require("./gestionArchivos");
 
-server.listen(3000, () => {
-    console.log('Servidor puerto 3000');
+
+server.use(bodyParser.json());
+server.use(cors());
+
+server.post('/usuario/login', function (req, res) {
+    console.log(req.body);
+    const mail = req.body.mail;
+    const pass = req.body.password;
+    // obtener leer el archivo con la lista de usuarios
+    // verificar que el mail y password existan en esa lista
+    // obtener mas informacion del usuario por ej -> nombre
+    const nombre="Seba";
+
+    res.status(200).json({msg:'login valido ', usuario: nombre});
+
 });
 
 server.get('/paquetes', function (req, res) {
@@ -27,3 +42,7 @@ server.get('/paquete/:id', function (req, res) {
     res.send('Get paquete id');
 });
 
+
+server.listen(3001, () => {
+    console.log('Servidor puerto 3001');
+});
