@@ -15,8 +15,10 @@
             <label>Email:</label>
             <br>
             <input type="email" id="usuario" placeholder="Ingresar Usuario" name="username" required>
+            <span style = "display: none; color: red" id="errorUsuario">El usuario contiene errores</span>
             <label>Contraseña:</label>
             <input type="password"  id="clave" minlength="6" placeholder="Enter Password" name="password" required>
+            <span style = "display: none; color: red" id="errorClave">La clave contiene errores</span>
             <button type="button" id="ingresar">Ingresar</button>
             <input type="checkbox" checked="checked" class="recordar"> Recordar mis datos
             <p>Olvidaste tu <a href="#">password</a>?</p>
