@@ -1,12 +1,23 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const helmet = require('helmet')
 const cors = require('cors');
 const server = express();
+const rateLimit = require("express-rate-limit");
+
 //const archivos = require("./gestionArchivos");
 
 
 server.use(bodyParser.json());
 server.use(cors());
+server.use(helmet());
+
+const limiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 15 minutes
+    max: 10 // limit each IP to 100 requests per windowMs
+  });
+
+server.use(limiter);
 
 server.post('/usuario/login', function (req, res) {
     console.log(req.body);
