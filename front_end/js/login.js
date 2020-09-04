@@ -3,49 +3,69 @@ let clave = document.getElementById('clave');
 let usuario = document.getElementById('usuario')
 //variable para chequear si hay errores o no
 let hayErrores = true;
+let usuarioError = true;
+let claveError = true;
+let dominiosInvalidos = ["@gmail.","@yahoo.","@hotmail.","@live.","@outlook."];
+
 
 usuario.addEventListener('change', (event) => {
-    //hayErrores = true;
+    if(usuario.value != "" && validateEmail(usuario.value)) {
+        usuarioError = false;
+    }
 })
 
+function validateEmail(email){
+    var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+
+    if (reg.test(email) == false) 
+    {
+        return false;
+    }
+    return true;
+}
+
 clave.addEventListener('change', (event) => {
-    //event.target.setCustomValidity('La contraseña debe tener al menos 8 caracteres y al menos un número');
-    //hayErrores = true;
+    if(clave.value.length < 6) {
+        claveError = false;
+    }
 })
 
 ingresar.addEventListener('click', (event) => {
     // event.preventDefault();
-    let mail = usuario.value
+    let mail = usuario.value;
     let password = clave.value;
 
-    hayErrores = validarValoresIngresados(mail, password);
+    hayErrores = validarValoresIngresados();
 
     if (!hayErrores) {
         checkDatosBack(mail, password)
-        // if (checkDatosBack(mail, password)) {
-        //     //location.href = './index.html'
-        // }
-        // else {
-        //     alert('El mail o la contraseña no coinciden con un usuario registrado')
-        // }
     }
     else {
-        alert('El mail o la contraseña no tienen el formato correcto')
+        if(usuarioError) {
+            document.getElementById('errorUsuario').style.display = 'block'
+        }
+        else {
+            document.getElementById('errorUsuario').style.display = 'none'
+        }
+         if (claveError) {
+            document.getElementById('errorClave').style.display = 'block'
+        }
+        else {
+            document.getElementById('errorClave').style.display = 'none'
+        }
     }
 })
 
 
-function validarValoresIngresados(mail, password){
+function validarValoresIngresados(){
     //TODO: realizar la validacion de los campos ingresados por el usuario
-
-    return false;
+    return usuarioError || claveError;
 }
 
 function checkDatosBack(mail, password) {
 
     const url = 'http://localhost:3001/usuario/login';
     const data = { mail: mail, password: password };
-
     fetch(url, {
         method: 'POST',
         body: JSON.stringify(data),
@@ -55,17 +75,8 @@ function checkDatosBack(mail, password) {
     })
     .then(res => res.json())
     .then(response => {
-        debugger
-
         console.log('Success:', response)
-
         location.href = './index.html'
-
     })
     .catch(error => console.log('Error:', error));
-
-    // if (mail == 'error@acamica.com') {
-    //     return false;
-    // }
-    //return true;
 }
