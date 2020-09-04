@@ -18,7 +18,7 @@ let contresañaRegistro = contraseña.value;
 
 function validarNombre(nombre) {
 
-    if (nombre.string.length < 3) {
+    if (nombre.length < 3) {
 
         return false;
 
@@ -31,17 +31,29 @@ function validarNombre(nombre) {
 
 btnRegistrar.addEventListener('click', () => {
     correoRegistro = correo.value;
-    let correocheck = validarCorreo(correoRegistro);
-    alert(correocheck);
+    nombreRegistro = nombre.value;
+    apellidoRegistro = apellido.value;
+    edadRegistro = edad.value;
+
+    let correoCheck = validarCorreo(correoRegistro);
+    let edadCheck = validarEdad(edadRegistro);
+    let nombreCheck = validarNombre(nombreRegistro);
+    let apellidoCheck = validarApellido(apellidoRegistro);
+    let contraseñaCheck = validarContraseña(contresañaRegistro);
+
+
+    alert(correoCheck);
+    alert(nombreCheck);
+    alert(edadCheck);
+    alert(apellidoCheck);
+    alert(contraseñaCheck);
     //alert(correoRegistro);
-
-
 
 });
 
 
 function validarApellido(apellido) {
-    if (apellido.length < 3) {
+    if (apellido.length < 2) {
 
         return false;
 
@@ -57,10 +69,12 @@ function validarCorreo(correo) {
     if (emailIsValid(correo) == true) {
         let n = correo.indexOf('@');
         let endEmail = correo.slice(n, correo.length);
-
+        let com = correo.slice(-4);
+        alert(com);
         if (endEmail == '@gmail.com' ||
             endEmail == '@hotmail.com' ||
-            endEmail == '@yahoo.com') {
+            endEmail == '@yahoo.com'||
+            com != '.com'){
 
             return false;
 
@@ -79,7 +93,12 @@ function emailIsValid(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-function validarEdad() {
+function validarEdad(edad) {
+    if(edad < 18 || edad >100 || isNaN(edad)){
+        return false;
+    }else{
+        return true;
+    }
 
 }
 
