@@ -2,7 +2,7 @@ let nombre = document.getElementById('nombre');
 let apellido = document.getElementById('apellido');
 let correo = document.getElementById('correo');
 let edad = document.getElementById('edad');
-let contraseña = document.getElementById('contrasena');
+let contrase = document.getElementById('contrasena');
 let btnRegistrar = document.getElementById('registerBtn');
 
 //correo.value = "emailemail.com";
@@ -11,7 +11,7 @@ let nombreRegistro = nombre.value;
 let apellidoRegistro = apellido.value;
 let correoRegistro = correo.value;
 let edadRegistro = edad.value;
-let contresañaRegistro = contraseña.value;
+let contresaRegistro = contrase.value;
 
 //correo.value = "emailemail.com";
 
@@ -34,21 +34,24 @@ btnRegistrar.addEventListener('click', () => {
     nombreRegistro = nombre.value;
     apellidoRegistro = apellido.value;
     edadRegistro = edad.value;
+    contraseRegistro = contrase.value;
+
 
     let correoCheck = validarCorreo(correoRegistro);
     let edadCheck = validarEdad(edadRegistro);
     let nombreCheck = validarNombre(nombreRegistro);
     let apellidoCheck = validarApellido(apellidoRegistro);
-    let contraseñaCheck = validarContraseña(contresañaRegistro);
+    let contraseCheck = validarContrase(contraseRegistro);
 
-
-    alert(correoCheck);
-    alert(nombreCheck);
-    alert(edadCheck);
-    alert(apellidoCheck);
-    alert(contraseñaCheck);
-    //alert(correoRegistro);
-
+    if(correoCheck == false ||
+        edadCheck == false ||
+        nombreCheck == false ||
+        apellidoCheck == false ||
+        contraseCheck == false){
+            return  false;
+        } else {
+            return true;
+        }
 });
 
 
@@ -102,8 +105,12 @@ function validarEdad(edad) {
 
 }
 
-function validarContraseña() {
-
+function validarContrase(contrase) {
+    if(contrase.length < 6) {
+        return false;
+    }else{
+        return true;
+    }
 }
 
 
