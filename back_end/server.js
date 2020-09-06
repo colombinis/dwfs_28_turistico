@@ -5,8 +5,7 @@ const cors = require('cors');
 const server = express();
 const rateLimit = require("express-rate-limit");
 
-//const archivos = require("./gestionArchivos");
-
+const archivos = require("./gestionArchivos");
 
 server.use(bodyParser.json());
 server.use(cors());
@@ -15,21 +14,25 @@ server.use(helmet());
 const limiter = rateLimit({
     windowMs: 60 * 60 * 1000, // 15 minutes
     max: 10 // limit each IP to 100 requests per windowMs
-  });
+});
 
 server.use(limiter);
 
+server.use(function (req, res, next) {
+    next();
+});
+
 server.post('/usuario/login', function (req, res) {
-    console.log(req.body);
     const mail = req.body.mail;
     const pass = req.body.password;
-    // obtener leer el archivo con la lista de usuarios
-    // verificar que el mail y password existan en esa lista
-    // obtener mas informacion del usuario por ej -> nombre
-    const nombre="Seba";
-
-    res.status(200).json({msg:'login valido ', usuario: nombre});
-
+    archivos.readFileLineJson('test.txt', function (err, result) {
+        var name = '';
+        var find = result.filter(function (element) {
+            return element.mail === mail && element.password === pass;
+        });
+        name = find[0].name;
+        res.status(200).json({ msg: 'login valido ', usuario: name });
+    });
 });
 
 server.get('/paquetes', function (req, res) {
