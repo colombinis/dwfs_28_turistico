@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const helmet = require('helmet')
+const helmet = require('helmet');
 const cors = require('cors');
 const server = express();
 const rateLimit = require("express-rate-limit");
@@ -11,17 +11,18 @@ server.use(bodyParser.json());
 server.use(cors());
 server.use(helmet());
 
-const limiter = rateLimit({
+/* const limiter = rateLimit({
     windowMs: 60 * 60 * 1000, // 1 hora
     max: 10 // limit each IP to 10 requests per windowMs
-});
+}); */
 
-server.use(limiter);
+//server.use(limiter);
 
 server.use(function (req, res, next) {
     next();
 });
 
+//Acciones para el usuario
 server.post('/usuario/login', function (req, res) {
     const mail = req.body.mail;
     const pass = req.body.password;
@@ -35,6 +36,22 @@ server.post('/usuario/login', function (req, res) {
     });
 });
 
+server.post('/usuario/crear', function (req, res) {
+    // Recibir json del usuario nuevo 
+    const jsonTexto = JSON.stringify(req.body);
+
+    // Modificar el json para que tenga el mismo formato q la otra info dentro del archivo test.txt
+
+    // Guardar esos datos en el test.txt para futura consulta de login
+    archivos.appendFile('test.txt', jsonCorregido);
+    console.log(jsonTexto);
+    
+    res.status(200).json({ msg: 'usuario creado'});
+})
+
+
+
+//navegacion sitio
 server.get('/paquetes', function (req, res) {
     res.send('Get paquete');
 });
@@ -57,6 +74,10 @@ server.get('/paquete/:id', function (req, res) {
 });
 
 
+
+
+
+//Servidor 
 server.listen(3001, () => {
     console.log('Servidor puerto 3001');
 });
