@@ -25,7 +25,7 @@ function validateEmail(email){
 }
 
 clave.addEventListener('change', (event) => {
-    if(clave.value.length < 6) {
+    if(clave.value.length >= 6) {
         claveError = false;
     }
 })
@@ -72,11 +72,24 @@ function checkDatosBack(mail, password) {
         headers: {
             'Content-Type': 'application/json'
         }
+    
     })
-    .then(res => res.json())
+    .then(res => {
+
+        console.log(res);
+        if(res.status == '200'){
+        return res.json()
+        }
+    })
     .then(response => {
+        if(response){
         console.log('Success:', response)
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('usuario', response.usuario);
+
         location.href = './index.html'
+        }
+        
     })
     .catch(error => console.log('Error:', error));
 }
