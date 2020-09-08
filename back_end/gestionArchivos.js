@@ -12,12 +12,11 @@ function writeFile(archivo, texto) {
 }
 
 function readFile(archivo) {
-    fs.readFile(archivo, 'utf8', function (err, data) {
-        if (err) {
+   return fs.readFileSync(archivo, 'utf8') 
+        /* if (err) {
             return console.log(err);
-        }
-        console.log(data);
-    })
+        } */
+        //console.log(data);
 }
 
 function appendFile(archivo, texto) {
