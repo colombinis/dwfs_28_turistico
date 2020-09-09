@@ -17,41 +17,29 @@ let contresaRegistro = contrase.value;
 
 
 function validarNombre(nombre) {
-
     if (nombre.length < 3) {
-
         return false;
-
     } else {
-
         return true;
-
     }
 }
 
 btnRegistrar.addEventListener('click', () => {
+    //alert('ok');
+ 
+    if(sumbit() == true){
     correoRegistro = correo.value;
     nombreRegistro = nombre.value;
     apellidoRegistro = apellido.value;
     edadRegistro = edad.value;
     contraseRegistro = contrase.value;
-
-
-    let correoCheck = validarCorreo(correoRegistro);
-    let edadCheck = validarEdad(edadRegistro);
-    let nombreCheck = validarNombre(nombreRegistro);
-    let apellidoCheck = validarApellido(apellidoRegistro);
-    let contraseCheck = validarContrase(contraseRegistro);
-
-    if(correoCheck == false ||
-        edadCheck == false ||
-        nombreCheck == false ||
-        apellidoCheck == false ||
-        contraseCheck == false){
-            return  false;
-        } else {
-            return true;
-        }
+    checkDatosBack(nombreRegistro,
+     apellidoRegistro,
+     edadRegistro,
+     correoRegistro,
+     contraseRegistro);
+     alert('ok');
+ } else{alert('error')}
 });
 
 
@@ -73,7 +61,7 @@ function validarCorreo(correo) {
         let n = correo.indexOf('@');
         let endEmail = correo.slice(n, correo.length);
         let com = correo.slice(-4);
-        alert(com);
+        //alert(com);
         if (endEmail == '@gmail.com' ||
             endEmail == '@hotmail.com' ||
             endEmail == '@yahoo.com'||
@@ -112,6 +100,74 @@ function validarContrase(contrase) {
         return true;
     }
 }
+
+function sumbit(){
+    
+    correoRegistro = correo.value;
+    nombreRegistro = nombre.value;
+    apellidoRegistro = apellido.value;
+    edadRegistro = edad.value;
+    contraseRegistro = contrase.value;
+
+
+    let correoCheck = validarCorreo(correoRegistro);
+    let edadCheck = validarEdad(edadRegistro);
+    let nombreCheck = validarNombre(nombreRegistro);
+    let apellidoCheck = validarApellido(apellidoRegistro);
+    let contraseCheck = validarContrase(contraseRegistro);
+
+    if(correoCheck == false ||
+        edadCheck == false ||
+        nombreCheck == false ||
+        apellidoCheck == false ||
+        contraseCheck == false){
+            return  false;
+        } else {
+            return true;
+        }
+}
+
+
+function checkDatosBack(nombre, apellido, edad, mail, password) {
+    alert(nombre, apellido, edad, mail, password);
+
+
+
+    const url = 'http://localhost:3001/usuario/crear';
+    const data = {
+        nombre: nombre, 
+        apellido: apellido,
+        edad: edad,
+        mail: mail,
+        password: password};
+    fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    
+    })
+    .then(res => {
+
+        console.log(res);
+        if(res.status == '200'){
+        return res.json()
+        }
+    })
+    .then(response => {
+        if(response){
+        console.log('Success:', response)
+        //localStorage.setItem('token', response.token);
+        //localStorage.setItem('usuario', response.usuario);
+        location.href = './login.html'
+        }
+        
+    })
+    .catch(error => console.log('Error:', error));
+}
+
+
 
 
 
