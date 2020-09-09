@@ -12,12 +12,14 @@ server.use(bodyParser.json());
 server.use(cors());
 server.use(helmet());
 
-/* const limiter = rateLimit({
+/* 
+const limiter = rateLimit({
     windowMs: 60 * 60 * 1000, // 1 hora
     max: 10 // limit each IP to 10 requests per windowMs
-}); */
+}); 
 
-//server.use(limiter);
+server.use(limiter); 
+*/
 
 server.use(function (req, res, next) {
     next();
@@ -25,48 +27,13 @@ server.use(function (req, res, next) {
 
 //Acciones para el usuario
 server.post('/usuario/login', function (req, res) {
+    //traigo el mail y pass del usuario
     const mail = req.body.mail;
     const pass = req.body.password;
 
-    //validar q exista el usuario y contra
-
-    //obtener la info y generar el JWT con la info del usuario
-
-    /* archivos.readFileLineJson('bd.txt', function (err, result) {
-        var name = '';
-
-        var find = result.filter(function (element) {
-            return element.mail === mail && element.password === pass;
-        });
-        name = find[0].name;
-
-        if (find) {
-
-            const informacion = {
-                nombre: name,
-                mail: mail,
-                password: pass
-            };
-
-            const firma = "holasegura";
-
-            const token = jwt.sign(informacion, firma)
-
-            console.log(token);
-
-            res.status(200).json({ msg: 'login valido ', usuario: name });
-
-        } else {
-            res.status(404).json({ msg: 'login invalido '});
-        }
-    }); */
-
-
-
-    //leer el archivo de base de datos bd.txt, traerlo en varuable
-    const strArray = archivos.readFile('bd.txt');
-
+    //leer el archivo de base de datos bd.txt, traerlo en variable
     //variable de texto convertirla a json
+    const strArray = archivos.readFile('bd.txt');
     const arrayJson = JSON.parse(strArray);
 
     //recorrer el array json y verificzr q exista el email y pw
@@ -74,25 +41,22 @@ server.post('/usuario/login', function (req, res) {
         return element.mail === mail && element.password === pass;
     });
 
-    console.log("json find ", find);
+    console.log("find ", find);
 
     //si existe, genero jwt y resp 200
     //si no existe envio error 404
-
     if (find) {
 
         const name = find.nombre;
 
+        //obtener la info y generar el JWT con la info del usuario
         const informacion = {
             nombre: name,
             mail: mail,
             password: pass
         };
-
         const firma = "holasegura";
-
         const token = jwt.sign(informacion, firma)
-
         console.log(token);
 
         res.status(200).json({ msg: 'login valido ', usuario: name, token: token });
@@ -100,21 +64,33 @@ server.post('/usuario/login', function (req, res) {
     } else {
         res.status(404).json({ msg: 'login invalido ' });
     }
-
 });
 
 server.post('/usuario/crear', function (req, res) {
+
+    //traer los datos de usuarios ya creados desde el archivo bd.txt
+    //parsear la info de bd.txt
+    const usuariosExistentes = archivos.readFile('bd.txt');
+    const usuariosExistentesArray = JSON.parse(usuariosExistentes);
+
     // Recibir json del usuario nuevo 
-    const jsonTexto = JSON.stringify(req.body);
+    //agregar el nuevo usuario al array de usuarios
+    const nuevoUsuarioJson = req.body;
+    usuariosExistentesArray.push(nuevoUsuarioJson);
+    //console.log("usuarios actualizados: ", usuariosExistentesArray);
 
-    // Modificar el json para que tenga el mismo formato q la otra info dentro del archivo test.txt
+    //Reescribir el archivo bd.txt con el nuevo array de usuarios pasado a string
+    const usuariosActualizadosStr = JSON.stringify(usuariosExistentesArray);
+    archivos.writeFile('bd.txt', usuariosActualizadosStr);
 
-    // Guardar esos datos en el test.txt para futura consulta de login
-    archivos.appendFile('test.txt', jsonCorregido);
-    console.log(jsonTexto);
+    //validacion: si se creo el usuario, dar res.200
+    res.status(200).json({ msg: 'usuario creado', nombre: req.body.nombre });
 
-    res.status(200).json({ msg: 'usuario creado' });
+    //si NO se creo el usuario, dar res.404
 })
+
+
+
 
 
 

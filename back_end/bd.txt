@@ -1,1 +1,1 @@
-[{"nombre":"anto","mail":"anto@email.com", "password":"123456"}, {"nombre":"nicol","mail":"nicol@email.com", "password":"1234567"}]
+[{"nombre":"anto","mail":"anto@email.com","password":"123456"},{"nombre":"nicol","mail":"nicol@email.com","password":"1234567"},{"nombre":"nuevoUser","mail":"nuevo@email.com","password":"123456"},{"nombre":"nuevoUser2","mail":"nuevo2@email.com","password":"123456"},{"nombre":"uma","mail":"umachu@email.com","password":"123456"}]
