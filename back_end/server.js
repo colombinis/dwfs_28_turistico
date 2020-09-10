@@ -34,9 +34,6 @@ server.use(function (req, res, next) {
   next();
 });
 
-const Usuario = mongoose.model("usuario", {nombre: String, mail: String, password: String});
-
-
 //Acciones para el usuario
 server.post("/usuario/login", function (req, res) {
   //traigo el mail y pass del usuario
@@ -110,12 +107,6 @@ server.post('/usuario/crear', function (req, res) {
 })
 
 
-  // Recibir json del usuario nuevo
-  //agregar el nuevo usuario al array de usuarios
-  const nuevoUsuarioJson = req.body;
-  usuariosExistentesArray.push(nuevoUsuarioJson);
-  //console.log("usuarios actualizados: ", usuariosExistentesArray);
-
 //navegacion sitio
 server.get("/paquetes", function (req, res) {
   res.send("Get paquete");
@@ -138,11 +129,23 @@ server.get("/paquete/:id", function (req, res) {
   res.send("Get paquete id");
 });
 
+
+
+
+
+
+
+
 server.get("/usuarios", async function (req, res) {
     const datos = await usuarios.obtenerUsuarios();
     console.log(datos);
   res.send(datos);
 });
+
+
+
+
+
 
 //Servidor
 server.listen(3001, () => {
