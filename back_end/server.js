@@ -5,6 +5,14 @@ const cors = require('cors');
 const server = express();
 const rateLimit = require("express-rate-limit");
 const jwt = require('jsonwebtoken');
+const mongoose = require("mongoose");
+mongoose.connect('mongodb://localhost:27017/dwfs28_turistico', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false,
+  useCreateIndex: true
+});
+
 
 const archivos = require("./gestionArchivos");
 
@@ -24,6 +32,9 @@ server.use(limiter);
 server.use(function (req, res, next) {
     next();
 });
+
+const Usuario = mongoose.model("usuario", {nombre: String, mail: String, password: String});
+
 
 //Acciones para el usuario
 server.post('/usuario/login', function (req, res) {
@@ -68,6 +79,16 @@ server.post('/usuario/login', function (req, res) {
 
 server.post('/usuario/crear', function (req, res) {
 
+    //nuevo usuario en base de datos
+    const nuevoUsuario = new Usuario(
+        {
+            nombre: req.body.nombre,
+            mail: req.body.mail,
+            password: req.body.password
+        }
+    );
+    nuevoUsuario.save();
+
     //traer los datos de usuarios ya creados desde el archivo bd.txt
     //parsear la info de bd.txt
     const usuariosExistentes = archivos.readFile('bd.txt');
@@ -88,9 +109,6 @@ server.post('/usuario/crear', function (req, res) {
 
     //si NO se creo el usuario, dar res.404
 })
-
-
-
 
 
 
