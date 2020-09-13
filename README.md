@@ -1,6 +1,7 @@
 # Trabajo integrador paquetes turisticos
 
 ### Paquete turistico (atributos)
+* id
 * titulo
 * descripcion
 * fecha_salida
