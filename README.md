@@ -22,14 +22,17 @@
 * pantalla compra paquete turistico
 
 #### Front-end (admin):
-* Back-end (solo admin):
+
+
+#### Back-end (solo admin):
 * ABM de paquetes turisticos (get, post , put , delete) /paquetes
-* Back-end (usuarios):
-* /usuario/registro
+
+#### Back-end (usuarios):
+* /usuario/crear
 * /usuario/login
-* /productos  (lista de paquetes turisticos)
-* /productos/:id ( se ve el detalle del paquete seleccionado)
-* /compra ( paquete turistico seleccionado y se descuenta la plaza de las disponibles)
+* /productos (lista de paquetes turisticos)
+* /productos/:id (se ve el detalle del paquete seleccionado)
+* /compra (paquete turistico seleccionado y se descuenta la plaza de las disponibles)
 
 # Requerimientos
 * no se utiliza ningun framework front-end

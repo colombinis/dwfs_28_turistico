@@ -7,8 +7,8 @@ const rateLimit = require("express-rate-limit");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 
-const archivos = require("./gestionUsuarios");
-const usuarios = require("./gestionUsuarios");
+const usuarios = require("./gestion-usuarios");
+const paquetes = require("./gestion-paquetes");
 
 mongoose.connect("mongodb://localhost:27017/proyecto", {
   useNewUrlParser: true,
@@ -34,19 +34,23 @@ server.use(function (req, res, next) {
   next();
 });
 
+//url para ver todos los usuarios
+server.get("/usuarios", async function (req, res) {
+  const listaUsuarios = await usuarios.obtenerUsuarios();
+  res.send(listaUsuarios);
+});
+
 //Acciones para el usuario
-server.post("/usuario/login", function (req, res) {
+server.post("/usuario/login", async function (req, res) {
   //traigo el mail y pass del usuario
   const mail = req.body.mail;
   const pass = req.body.password;
 
-  //leer el archivo de base de datos bd.txt, traerlo en variable
-  //variable de texto convertirla a json
-  const strArray = archivos.readFile("bd.txt");
-  const arrayJson = JSON.parse(strArray);
+  //leer el archivo de base de datos 
+  const bdUsuarios = await usuarios.obtenerUsuarios();
 
-  //recorrer el array json y verificzr q exista el email y pw
-  const find = arrayJson.find(function (element) {
+  //recorrer el array json y verificar q exista el email y pw
+  const find = bdUsuarios.find(function (element) {
     return element.mail === mail && element.password === pass;
   });
 
@@ -56,10 +60,14 @@ server.post("/usuario/login", function (req, res) {
   //si no existe envio error 404
   if (find) {
     const name = find.nombre;
+    const apellido = find.apellido;
+    const edad = find.edad;
 
     //obtener la info y generar el JWT con la info del usuario
     const informacion = {
       nombre: name,
+      apellido: apellido,
+      edad: edad,
       mail: mail,
       password: pass,
     };
@@ -69,80 +77,88 @@ server.post("/usuario/login", function (req, res) {
 
     res.status(200).json({ msg: "login valido ", usuario: name, token: token });
   } else {
-    res.status(404).json({ msg: "login invalido " });
+    res.status(404).json({ msg: "login invalido" });
   }
 });
 
-server.post('/usuario/crear', function (req, res) {
+server.post('/usuario/crear', async function (req, res) {
+  //traigo el dato mail ingresado
+  const mailRegistro = req.body.mail;
 
-    //nuevo usuario en base de datos
-    const nuevoUsuario = new Usuario(
-        {
-            nombre: req.body.nombre,
-            mail: req.body.mail,
-            password: req.body.password
-        }
-    );
-    nuevoUsuario.save();
+  //chequeo si existe el mail en la base de datos
+  const bdUsuariosRegistro = await usuarios.obtenerUsuarios();
+  const find = bdUsuariosRegistro.find(function (element) {
+    return element.mail === mailRegistro;
+  });
 
-    //traer los datos de usuarios ya creados desde el archivo bd.txt
-    //parsear la info de bd.txt
-    const usuariosExistentes = archivos.readFile('bd.txt');
-    const usuariosExistentesArray = JSON.parse(usuariosExistentes);
+  //si existe, devuelvo error, q intente con otro mail
+  //si no existe, creo el usuario
+  if (find) {
+    res.status(404).json({ msg: "mail ya existente. pruebe con otro.", mail: mailRegistro });
 
-    // Recibir json del usuario nuevo 
-    //agregar el nuevo usuario al array de usuarios
-    const nuevoUsuarioJson = req.body;
-    usuariosExistentesArray.push(nuevoUsuarioJson);
-    //console.log("usuarios actualizados: ", usuariosExistentesArray);
-
-    //Reescribir el archivo bd.txt con el nuevo array de usuarios pasado a string
-    const usuariosActualizadosStr = JSON.stringify(usuariosExistentesArray);
-    archivos.writeFile('bd.txt', usuariosActualizadosStr);
+  } else {
+    //agrego usuarios mediante la fx definida en gestion-usuarios.js
+    usuarios.agregarUsuario(req);
 
     //validacion: si se creo el usuario, dar res.200
     res.status(200).json({ msg: 'usuario creado', nombre: req.body.nombre });
-
-    //si NO se creo el usuario, dar res.404
+  }
 })
 
 
-//navegacion sitio
-server.get("/paquetes", function (req, res) {
-  res.send("Get paquete");
+
+//ACCIONES PAQUETES (ADMIN)
+//obtener lista de paquetes
+server.get("/paquetes", async function (req, res) {
+  const listaPaquetes = await paquetes.obtenerPaquetes();
+  res.send(listaPaquetes);
 });
 
-server.post("/paquete", function (req, res) {
-  console.log("Post paquete");
+//agregar un paquete
+server.post("/paquetes", function (req, res) {
+  //agrego paquete turistico mediante la fx definida en gestion-paquetes.js
+  paquetes.agregarPaquete(req);
+
+  //validacion: si se creo el paquete, dar res.200
+  res.status(200).json({ msg: 'paquete creado', titulo: req.body.titulo });
+  res.status(404).json({ msg: 'paquete no creado', titulo: req.body.titulo });
 });
 
-server.put("/paquete", function (req, res) {
-  console.log("Put paquete");
+//modificar el precio de un paquete
+server.put("/paquetes", function (req, res) {
+  const idPaquete = req.body.id;
+  const nuevoPrecio = req.body.precio;
+
+  paquetes.modificarPrecioPaquete(idPaquete, nuevoPrecio);
+  res.status(200).json({ msg: 'precio actualizado', paquete: idPaquete, precio: nuevoPrecio });
+  res.status(404).json({ msg: 'precio no actualizado', paquete: idPaquete });
 });
 
-server.delete("/paquete", function (req, res) {
-  console.log("Delete paquete");
+//eliminar un paquete
+server.delete("/paquetes", function (req, res) {
+  //se pasa como parametro el titulo del paquete a eliminar
+  const idPaquete = req.body.id;
+
+  paquetes.eliminarPaquete(tituloPaquete);
+  res.status(200).json({ msg: 'paquete eliminado', paquete: idPaquete });
+  res.status(404).json({ msg: 'paquete no eliminado', paquete: idPaquete });
 });
 
-server.get("/paquete/:id", function (req, res) {
-  archivos.appendFile("./test.txt", `${req.params.id}`);
+
+
+
+
+//acciones para ver los paquetes turistico
+server.get("/productos", async function (req, res) {
+  //lista de paquetes turisticos disponibles
+  const listaPaquetes = await paquetes.obtenerPaquetes();
+  res.send(listaPaquetes);
+});
+
+server.get("/producto/:id", function (req, res) {
+  //archivos.appendFile("./test.txt", `${req.params.id}`);
   res.send("Get paquete id");
 });
-
-
-
-
-
-
-
-
-server.get("/usuarios", async function (req, res) {
-    const datos = await usuarios.obtenerUsuarios();
-    console.log(datos);
-  res.send(datos);
-});
-
-
 
 
 

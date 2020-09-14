@@ -80,7 +80,7 @@ function validarCorreo(correo) {
 }
 
 function emailIsValid(email) {
-    debugger;
+    //debugger;
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 

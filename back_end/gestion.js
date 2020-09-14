@@ -32,4 +32,4 @@ function eliminarusuario(){
     })
 }
 //modificarusuario();
-eliminarusuario();
+//eliminarusuario();

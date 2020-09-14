@@ -1,0 +1,41 @@
+ejemplos json's para cada endpoint:
+
+
+USUARIOS
+- crear:
+{
+    "nombre": "antonella",
+    "apellido": "bayugar",
+    "edad": "24",
+    "mail": "anto@email.com",
+    "password": "123456"
+}
+
+-login:
+{
+    "mail": "anto@email.com",
+    "password": "123456"
+}
+
+
+PAQUETES
+-crear:
+{
+    "titulo": "Bariloche - 1 semana",
+    "descripcion": "una semana todo inclusive en bariloche, neuquen.",
+    "fecha_salida": "10 de diciembre",
+    "estado": "disponible",
+    "precio": 30000,
+    "plazas_disponibles": 15
+}
+
+-actualizar precio:
+{
+   "id": "5f5ea2fd53608682d535422c",
+   "precio": "30000"
+}
+
+-eliminar paquete:
+{
+   "id": "5f5ea2fd53608682d535422c"
+}
