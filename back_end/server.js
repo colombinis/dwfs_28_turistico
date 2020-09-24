@@ -5,29 +5,38 @@ const cors = require("cors");
 const server = express();
 const rateLimit = require("express-rate-limit");
 const jwt = require("jsonwebtoken");
-const mongoose = require("mongoose");
 
 const usuarios = require("./gestion-usuarios");
 const paquetes = require("./gestion-paquetes");
 
-mongoose.connect("mongodb://localhost:27017/proyecto", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
-  useCreateIndex: true,
-});
+const bdatos = require('./factoryBaseDatos')
+
+bdatos.agregar('paquetes', { prop1:valor1 , prop2:boolean  }) // trae todos los pa
+bdatos.consultar('paquetes' ,{id:123}) // trae todos los pa
+bdatos.modificar('paquetes' ,{id:123} , { prop1:valor1 , prop2:boolean  } ) // trae todos los pa
+bdatos.eliminar('paquetes'  ,{id:123}) // trae todos los pa
+
+
+
+// const mongoose = require("mongoose");
+// mongoose.connect("mongodb://localhost:27017/proyecto", {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+//   useFindAndModify: false,
+//   useCreateIndex: true,
+// });
 
 server.use(bodyParser.json());
 server.use(cors());
 server.use(helmet());
 
-/* 
+/*
 const limiter = rateLimit({
     windowMs: 60 * 60 * 1000, // 1 hora
     max: 10 // limit each IP to 10 requests per windowMs
-}); 
+});
 
-server.use(limiter); 
+server.use(limiter);
 */
 
 server.use(function (req, res, next) {
@@ -46,7 +55,7 @@ server.post("/usuario/login", async function (req, res) {
   const mail = req.body.mail;
   const pass = req.body.password;
 
-  //leer el archivo de base de datos 
+  //leer el archivo de base de datos
   const bdUsuarios = await usuarios.obtenerUsuarios();
 
   //recorrer el array json y verificar q exista el email y pw
