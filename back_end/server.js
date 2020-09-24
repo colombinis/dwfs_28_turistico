@@ -9,12 +9,12 @@ const jwt = require("jsonwebtoken");
 const usuarios = require("./gestion-usuarios");
 const paquetes = require("./gestion-paquetes");
 
-const bdatos = require('./factoryBaseDatos')
+const bdatos = require('./factoryBaseDatos');
 
-bdatos.agregar('paquetes', { prop1:valor1 , prop2:boolean  }) // trae todos los pa
-bdatos.consultar('paquetes' ,{id:123}) // trae todos los pa
-bdatos.modificar('paquetes' ,{id:123} , { prop1:valor1 , prop2:boolean  } ) // trae todos los pa
-bdatos.eliminar('paquetes'  ,{id:123}) // trae todos los pa
+// bdatos.agregar('paquetes', { prop1:valor1 , prop2:boolean  }) // trae todos los pa
+// bdatos.consultar('paquetes' ,{id:123}) // trae todos los pa
+// bdatos.modificar('paquetes' ,{id:123} , { prop1:valor1 , prop2:boolean  } ) // trae todos los pa
+// bdatos.eliminar('paquetes'  ,{id:123}) // trae todos los pa
 
 
 
@@ -126,7 +126,14 @@ server.get("/paquetes", async function (req, res) {
 //agregar un paquete
 server.post("/paquetes", function (req, res) {
   //agrego paquete turistico mediante la fx definida en gestion-paquetes.js
-  paquetes.agregarPaquete(req);
+  bdatos.agregar('paquetes', {
+    titulo: req.body.titulo,
+    descripcion: req.body.descripcion,
+    fecha_salida: req.body.fecha_salida,
+    estado: req.body.estado,
+    precio: req.body.precio,
+    plazas_disponibles: req.body.plazas_disponibles,
+  });
 
   //validacion: si se creo el paquete, dar res.200
   res.status(200).json({ msg: 'paquete creado', titulo: req.body.titulo });
